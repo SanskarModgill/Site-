@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Space Facts</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+ 
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0a0a1a;
+      color: #ffffff;
+    }
+ 
+    nav {
+      background-color: #111133;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #4444aa;
+    }
+ 
+    nav .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #88aaff;
+    }
+ 
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+ 
+    nav ul a {
+      color: #ccccff;
+      text-decoration: none;
+      font-size: 15px;
+    }
+ 
+    nav ul a:hover {
+      color: #88aaff;
+      text-decoration: underline;
+    }
+ 
+    .page {
+      display: none;
+      padding: 40px 30px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+ 
+    .page.active {
+      display: block;
+    }
+ 
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+    }
+ 
+    .hero h1 {
+      font-size: 38px;
+      color: #88aaff;
+      margin-bottom: 15px;
+    }
+ 
+    .hero p {
+      font-size: 16px;
+      color: #aaaacc;
+      max-width: 550px;
+      margin: 0 auto 25px;
+      line-height: 1.7;
+    }
+ 
+    .hero button {
+      background-color: #4444aa;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+ 
+    .hero button:hover {
+      background-color: #6666cc;
+    }
+ 
+    h2 {
+      font-size: 26px;
+      color: #88aaff;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #4444aa;
+      padding-bottom: 8px;
+    }
+ 
+    p {
+      color: #aaaacc;
+      line-height: 1.8;
+      margin-bottom: 14px;
+      font-size: 15px;
+    }
+ 
+    .about-facts {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 25px;
+    }
+ 
+    .fact-box {
+      background-color: #111133;
+      border: 1px solid #4444aa;
+      border-radius: 6px;
+      padding: 18px 22px;
+      flex: 1;
+      min-width: 180px;
+      text-align: center;
+    }
+ 
+    .fact-box h3 {
+      font-size: 22px;
+      color: #88aaff;
+      margin-bottom: 6px;
+    }
+ 
+    .fact-box p {
+      font-size: 13px;
+      color: #8888bb;
+      margin: 0;
+    }
+ 
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+ 
+    .card {
+      background-color: #111133;
+      border: 1px solid #4444aa;
+      border-radius: 6px;
+      padding: 20px;
+    }
+ 
+    .card .emoji {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+ 
+    .card h3 {
+      color: #88aaff;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+ 
+    .card p {
+      font-size: 13px;
+      color: #8888bb;
+      margin: 0;
+      line-height: 1.6;
+    }
+ 
+    form {
+      max-width: 480px;
+      margin-top: 20px;
+    }
+ 
+    .form-group {
+      margin-bottom: 16px;
+    }
+ 
+    label {
+      display: block;
+      font-size: 14px;
+      color: #aaaacc;
+      margin-bottom: 5px;
+    }
+ 
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      background-color: #111133;
+      border: 1px solid #4444aa;
+      border-radius: 5px;
+      color: #ffffff;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+    }
+ 
+    textarea {
+      height: 110px;
+      resize: vertical;
+    }
+ 
+    form button {
+      background-color: #4444aa;
+      color: white;
+      border: none;
+      padding: 11px 26px;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+ 
+    form button:hover {
+      background-color: #6666cc;
+    }
+ 
+    #success-msg {
+      display: none;
+      color: #88ffaa;
+      font-size: 15px;
+      margin-top: 15px;
+    }
+ 
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #555577;
+      font-size: 13px;
+      border-top: 1px solid #222244;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+ 
+  <nav>
+    <div class="logo">🌌 Space Facts</div>
+    <ul>
+      <li><a href="#" onclick="showPage('home')">Home</a></li>
+      <li><a href="#" onclick="showPage('about')">About</a></li>
+      <li><a href="#" onclick="showPage('explore')">Explore</a></li>
+      <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+    </ul>
+  </nav>
+ 
+  <!-- HOME -->
+  <div class="page active" id="home">
+    <div class="hero">
+      <h1>Welcome to Space Facts</h1>
+      <p>A website dedicated to sharing interesting facts and information about our universe — from planets to black holes.</p>
+      <button onclick="showPage('explore')">Explore Topics</button>
+    </div>
+  </div>
+ 
+  <!-- ABOUT -->
+  <div class="page" id="about">
+    <h2>About This Website</h2>
+    <p>This website was created as a Web Programming course project. The goal is to present interesting space facts in a simple and easy-to-read way.</p>
+    <p>Space has always been fascinating to me. The universe is incredibly large and there is still so much we don't know about it. I wanted to build a site that makes learning about space fun for everyone.</p>
+    <p>The site is built using only HTML, CSS, and JavaScript — no frameworks or libraries were used.</p>
+ 
+    <div class="about-facts">
+      <div class="fact-box">
+        <h3>8</h3>
+        <p>Planets in our Solar System</p>
+      </div>
+      <div class="fact-box">
+        <h3>13.8B</h3>
+        <p>Years since the Big Bang</p>
+      </div>
+      <div class="fact-box">
+        <h3>5,500+</h3>
+        <p>Exoplanets discovered</p>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- EXPLORE -->
+  <div class="page" id="explore">
+    <h2>Explore Space Topics</h2>
+    <p>Here are some of the most interesting things in our universe.</p>
+ 
+    <div class="cards">
+      <div class="card">
+        <div class="emoji">🪐</div>
+        <h3>Saturn</h3>
+        <p>Saturn is the sixth planet from the Sun and is known for its beautiful ring system made of ice and rock.</p>
+      </div>
+      <div class="card">
+        <div class="emoji">🌑</div>
+        <h3>Black Holes</h3>
+        <p>A black hole is a region in space where gravity is so strong that nothing — not even light — can escape from it.</p>
+      </div>
+      <div class="card">
+        <div class="emoji">⭐</div>
+        <h3>Stars</h3>
+        <p>Stars are giant balls of hot gas. Our Sun is a star. There are billions of stars in the Milky Way alone.</p>
+      </div>
+      <div class="card">
+        <div class="emoji">🌌</div>
+        <h3>Galaxies</h3>
+        <p>A galaxy is a system of millions or billions of stars, gas, and dust held together by gravity.</p>
+      </div>
+      <div class="card">
+        <div class="emoji">🌠</div>
+        <h3>Meteor Showers</h3>
+        <p>Meteor showers happen when Earth passes through debris left by comets. They can be seen with the naked eye.</p>
+      </div>
+      <div class="card">
+        <div class="emoji">🚀</div>
+        <h3>Space Exploration</h3>
+        <p>Humans first landed on the Moon in 1969. Today, we are working on missions to Mars and beyond.</p>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- CONTACT -->
+  <div class="page" id="contact">
+    <h2>Contact</h2>
+    <p>Have a question or suggestion? Fill out the form below and I'll get back to you.</p>
+ 
+    <form onsubmit="submitForm(event)">
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" placeholder="Enter your name" />
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="Enter your email" />
+      </div>
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <select id="subject">
+          <option value="">-- Select --</option>
+          <option>General Question</option>
+          <option>Space Fact Suggestion</option>
+          <option>Report an Issue</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" placeholder="Write your message here..."></textarea>
+      </div>
+      <button type="submit">Send Message</button>
+      <p id="success-msg">Message sent successfully! Thank you.</p>
+    </form>
+  </div>
+ 
+  <footer>
+    <p>Space Facts Website — Web Programming Course Project &copy; 2026</p>
+  </footer>
+ 
+  <script>
+    function showPage(id) {
+      var pages = document.querySelectorAll('.page');
+      for (var i = 0; i < pages.length; i++) {
+        pages[i].classList.remove('active');
+      }
+      document.getElementById(id).classList.add('active');
+    }
+ 
+    function submitForm(e) {
+      e.preventDefault();
+ 
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+      var message = document.getElementById('message').value;
+ 
+      if (name == '' || email == '' || message == '') {
+        alert('Please fill in all required fields.');
+        return;
+      }
+ 
+      document.getElementById('success-msg').style.display = 'block';
+ 
+      document.getElementById('name').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('message').value = '';
+    }
+  </script>
+ 
+</body>
+</html>
