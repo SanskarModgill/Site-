@@ -3,382 +3,574 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Space Facts</title>
+  <title>CosmosHub</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+    :root {
+      --bg: #05050f;
+      --surface: #0d0d2b;
+      --accent: #00e5ff;
+      --accent2: #7b2fff;
+      --text: #e8eaf6;
+      --muted: #7986cb;
+      --card-bg: rgba(13, 13, 43, 0.85);
+      --glow: 0 0 24px rgba(0, 229, 255, 0.25);
     }
+ 
+    html { scroll-behavior: smooth; }
  
     body {
-      font-family: Arial, sans-serif;
-      background-color: #0a0a1a;
-      color: #ffffff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
     }
  
+    /* STAR CANVAS */
+    #stars-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+ 
+    /* NAVBAR */
     nav {
-      background-color: #111133;
-      padding: 15px 30px;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid #4444aa;
+      padding: 1.2rem 5%;
+      background: rgba(5, 5, 15, 0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 229, 255, 0.1);
     }
  
     nav .logo {
-      font-size: 22px;
+      font-size: 1.4rem;
       font-weight: bold;
-      color: #88aaff;
+      color: var(--accent);
+      letter-spacing: 2px;
+      border: 2px solid var(--text);
+      padding: 4px 10px;
     }
  
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 25px;
-    }
+    nav .logo span { color: var(--accent2); }
+ 
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
  
     nav ul a {
-      color: #ccccff;
+      color: var(--muted);
       text-decoration: none;
-      font-size: 15px;
+      font-size: 0.9rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color 0.3s;
     }
  
-    nav ul a:hover {
-      color: #88aaff;
-      text-decoration: underline;
-    }
+    nav ul a:hover, nav ul a.active { color: var(--accent); }
  
+    /* PAGES */
     .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
       display: none;
-      padding: 40px 30px;
-      max-width: 900px;
-      margin: 0 auto;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 7rem 5% 4rem;
     }
  
-    .page.active {
+    .page.active { display: flex; }
+ 
+    /* HOME */
+    .hero {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+ 
+    .tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      padding: 0.4rem 1.2rem;
+      border-radius: 999px;
+    }
+ 
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+    }
+ 
+    h1 .glow {
+      color: var(--accent);
+      text-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
       display: block;
     }
  
-    .hero {
-      text-align: center;
-      padding: 60px 20px;
-    }
- 
-    .hero h1 {
-      font-size: 38px;
-      color: #88aaff;
-      margin-bottom: 15px;
-    }
- 
-    .hero p {
-      font-size: 16px;
-      color: #aaaacc;
+    .subtitle {
       max-width: 550px;
-      margin: 0 auto 25px;
-      line-height: 1.7;
-    }
- 
-    .hero button {
-      background-color: #4444aa;
-      color: white;
-      border: none;
-      padding: 12px 28px;
-      font-size: 15px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
- 
-    .hero button:hover {
-      background-color: #6666cc;
-    }
- 
-    h2 {
-      font-size: 26px;
-      color: #88aaff;
-      margin-bottom: 15px;
-      border-bottom: 1px solid #4444aa;
-      padding-bottom: 8px;
-    }
- 
-    p {
-      color: #aaaacc;
+      color: var(--muted);
+      font-size: 1.05rem;
       line-height: 1.8;
-      margin-bottom: 14px;
-      font-size: 15px;
     }
  
-    .about-facts {
+    .btn-group {
       display: flex;
-      gap: 20px;
+      gap: 1rem;
       flex-wrap: wrap;
-      margin-top: 25px;
+      justify-content: center;
     }
  
-    .fact-box {
-      background-color: #111133;
-      border: 1px solid #4444aa;
-      border-radius: 6px;
-      padding: 18px 22px;
-      flex: 1;
-      min-width: 180px;
+    .btn {
+      padding: 0.9rem 2.4rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+      font-weight: 700;
+    }
+ 
+    .btn-primary {
+      background: var(--accent);
+      color: #05050f;
+      box-shadow: var(--glow);
+    }
+ 
+    .btn-primary:hover {
+      background: #fff;
+      box-shadow: 0 0 40px rgba(0,229,255,0.6);
+      transform: translateY(-2px);
+    }
+ 
+    .btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid rgba(0, 229, 255, 0.5);
+    }
+ 
+    .btn-outline:hover {
+      background: rgba(0, 229, 255, 0.08);
+      transform: translateY(-2px);
+    }
+ 
+    .planet {
+      position: absolute;
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
+    }
+ 
+    .planet-1 {
+      width: 200px; height: 200px;
+      background: radial-gradient(circle at 35% 35%, #7b2fff, #1a0040);
+      right: 6%; top: 15%;
+      box-shadow: 0 0 80px rgba(123,47,255,0.4);
+      opacity: 0.9;
+    }
+ 
+    .planet-2 {
+      width: 90px; height: 90px;
+      background: radial-gradient(circle at 35% 35%, #00e5ff, #003344);
+      left: 5%; bottom: 22%;
+      box-shadow: 0 0 40px rgba(0,229,255,0.4);
+      opacity: 0.85;
+      animation-delay: -3s;
+    }
+ 
+    /* ABOUT */
+    .section-title {
       text-align: center;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
     }
  
-    .fact-box h3 {
-      font-size: 22px;
-      color: #88aaff;
-      margin-bottom: 6px;
+    .section-title span { color: var(--accent); }
+ 
+    .section-sub {
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.9rem;
+      margin-bottom: 3rem;
+      letter-spacing: 1px;
     }
  
-    .fact-box p {
-      font-size: 13px;
-      color: #8888bb;
-      margin: 0;
-    }
- 
-    .cards {
+    .about-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      max-width: 900px;
+      width: 100%;
+      align-items: center;
+    }
+ 
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 1.2rem;
+      font-size: 0.98rem;
+    }
+ 
+    .about-text p strong { color: var(--text); }
+ 
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+ 
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(0,229,255,0.12);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+ 
+    .stat-card:hover {
+      border-color: rgba(0,229,255,0.4);
+      transform: translateY(-4px);
+      box-shadow: var(--glow);
+    }
+ 
+    .stat-num { font-size: 2rem; font-weight: 900; color: var(--accent); }
+ 
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 0.3rem;
+    }
+ 
+    /* EXPLORE */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      width: 100%;
     }
  
     .card {
-      background-color: #111133;
-      border: 1px solid #4444aa;
-      border-radius: 6px;
-      padding: 20px;
+      background: var(--card-bg);
+      border: 1px solid rgba(0,229,255,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
     }
  
-    .card .emoji {
-      font-size: 36px;
-      margin-bottom: 10px;
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(0,229,255,0.2);
     }
  
-    .card h3 {
-      color: #88aaff;
-      font-size: 16px;
-      margin-bottom: 8px;
+    .card-img {
+      width: 100%; height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.5rem;
     }
  
-    .card p {
-      font-size: 13px;
-      color: #8888bb;
-      margin: 0;
-      line-height: 1.6;
-    }
+    .card-body { padding: 1.2rem 1.4rem 1.6rem; }
+    .card-body h3 { color: var(--accent); font-size: 0.95rem; margin-bottom: 0.5rem; letter-spacing: 1px; }
+    .card-body p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
  
-    form {
-      max-width: 480px;
-      margin-top: 20px;
-    }
+    /* CONTACT */
+    .contact-wrapper { max-width: 560px; width: 100%; }
  
-    .form-group {
-      margin-bottom: 16px;
-    }
+    .form-group { margin-bottom: 1.3rem; }
  
     label {
       display: block;
-      font-size: 14px;
-      color: #aaaacc;
-      margin-bottom: 5px;
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
     }
  
     input, textarea, select {
       width: 100%;
-      padding: 10px 12px;
-      background-color: #111133;
-      border: 1px solid #4444aa;
-      border-radius: 5px;
-      color: #ffffff;
-      font-size: 14px;
-      font-family: Arial, sans-serif;
+      background: var(--card-bg);
+      border: 1px solid rgba(0,229,255,0.15);
+      border-radius: 6px;
+      padding: 0.9rem 1rem;
+      color: var(--text);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
  
-    textarea {
-      height: 110px;
-      resize: vertical;
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 16px rgba(0,229,255,0.15);
     }
  
-    form button {
-      background-color: #4444aa;
-      color: white;
-      border: none;
-      padding: 11px 26px;
-      font-size: 14px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+    textarea { resize: vertical; min-height: 130px; }
+    select option { background: var(--surface); }
  
-    form button:hover {
-      background-color: #6666cc;
-    }
- 
-    #success-msg {
+    .form-success {
       display: none;
-      color: #88ffaa;
-      font-size: 15px;
-      margin-top: 15px;
+      text-align: center;
+      padding: 2.5rem;
+      background: var(--card-bg);
+      border: 1px solid rgba(0,229,255,0.3);
+      border-radius: 12px;
+      box-shadow: var(--glow);
     }
  
+    .form-success .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .form-success h3 { color: var(--accent); margin-bottom: 0.5rem; }
+    .form-success p { color: var(--muted); font-size: 0.9rem; }
+ 
+    /* FOOTER */
     footer {
+      position: relative;
+      z-index: 1;
       text-align: center;
-      padding: 20px;
-      color: #555577;
-      font-size: 13px;
-      border-top: 1px solid #222244;
-      margin-top: 50px;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      border-top: 1px solid rgba(0,229,255,0.07);
+      letter-spacing: 1px;
+    }
+ 
+    footer span { color: var(--accent); }
+ 
+    /* ANIMATIONS */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-20px); }
+    }
+ 
+    /* RESPONSIVE */
+    @media (max-width: 680px) {
+      .about-grid { grid-template-columns: 1fr; }
+      nav ul { gap: 1.2rem; }
+      .planet-1 { width: 110px; height: 110px; }
     }
   </style>
 </head>
 <body>
  
+  <canvas id="stars-canvas"></canvas>
+ 
+  <!-- NAVBAR -->
   <nav>
-    <div class="logo">🌌 Space Facts</div>
+    <div class="logo">Cosmos<span>Hub</span></div>
     <ul>
-      <li><a href="#" onclick="showPage('home')">Home</a></li>
-      <li><a href="#" onclick="showPage('about')">About</a></li>
-      <li><a href="#" onclick="showPage('explore')">Explore</a></li>
-      <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+      <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+      <li><a href="#" class="nav-link" data-page="about">About</a></li>
+      <li><a href="#" class="nav-link" data-page="explore">Explore</a></li>
+      <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
     </ul>
   </nav>
  
   <!-- HOME -->
-  <div class="page active" id="home">
+  <section class="page active" id="home">
+    <div class="planet planet-1"></div>
+    <div class="planet planet-2"></div>
     <div class="hero">
-      <h1>Welcome to Space Facts</h1>
-      <p>A website dedicated to sharing interesting facts and information about our universe — from planets to black holes.</p>
-      <button onclick="showPage('explore')">Explore Topics</button>
+      <div class="tag">🚀 Welcome to the Universe</div>
+      <h1>Explore the <span class="glow">Cosmos</span></h1>
+      <p class="subtitle">Journey beyond the stars. Discover galaxies, nebulae, and the mysteries that lie in the infinite expanse of space.</p>
+      <div class="btn-group">
+        <button class="btn btn-primary nav-link" data-page="explore">Start Exploring</button>
+        <button class="btn btn-outline nav-link" data-page="about">Learn More</button>
+      </div>
     </div>
-  </div>
+  </section>
  
   <!-- ABOUT -->
-  <div class="page" id="about">
-    <h2>About This Website</h2>
-    <p>This website was created as a Web Programming course project. The goal is to present interesting space facts in a simple and easy-to-read way.</p>
-    <p>Space has always been fascinating to me. The universe is incredibly large and there is still so much we don't know about it. I wanted to build a site that makes learning about space fun for everyone.</p>
-    <p>The site is built using only HTML, CSS, and JavaScript — no frameworks or libraries were used.</p>
- 
-    <div class="about-facts">
-      <div class="fact-box">
-        <h3>8</h3>
-        <p>Planets in our Solar System</p>
+  <section class="page" id="about">
+    <h2 class="section-title">About <span>CosmosHub</span></h2>
+    <p class="section-sub">// who we are &amp; what we do</p>
+    <div class="about-grid">
+      <div class="about-text">
+        <p><strong>CosmosHub</strong> is your gateway to the wonders of the universe. We bring together astronomy enthusiasts, researchers, and curious minds from around the world.</p>
+        <p>From the fiery birth of stars to the silent drift of distant galaxies, we curate knowledge, imagery, and science to make space <strong>accessible to everyone</strong>.</p>
+        <p>Our mission: ignite curiosity, inspire exploration, and remind humanity just how <strong>extraordinary</strong> our universe truly is.</p>
       </div>
-      <div class="fact-box">
-        <h3>13.8B</h3>
-        <p>Years since the Big Bang</p>
-      </div>
-      <div class="fact-box">
-        <h3>5,500+</h3>
-        <p>Exoplanets discovered</p>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num">200B+</div><div class="stat-label">Galaxies</div></div>
+        <div class="stat-card"><div class="stat-num">13.8B</div><div class="stat-label">Years Old</div></div>
+        <div class="stat-card"><div class="stat-num">5,500+</div><div class="stat-label">Exoplanets</div></div>
+        <div class="stat-card"><div class="stat-num">∞</div><div class="stat-label">Mysteries</div></div>
       </div>
     </div>
-  </div>
+  </section>
  
   <!-- EXPLORE -->
-  <div class="page" id="explore">
-    <h2>Explore Space Topics</h2>
-    <p>Here are some of the most interesting things in our universe.</p>
- 
-    <div class="cards">
+  <section class="page" id="explore">
+    <h2 class="section-title">Explore the <span>Universe</span></h2>
+    <p class="section-sub">// cosmic wonders await</p>
+    <div class="cards-grid">
       <div class="card">
-        <div class="emoji">🪐</div>
-        <h3>Saturn</h3>
-        <p>Saturn is the sixth planet from the Sun and is known for its beautiful ring system made of ice and rock.</p>
+        <div class="card-img" style="background:linear-gradient(135deg,#1a0533,#05050f)">🌌</div>
+        <div class="card-body"><h3>Milky Way Galaxy</h3><p>Our home galaxy spans over 100,000 light-years and contains between 100–400 billion stars — including our very own Sun.</p></div>
       </div>
       <div class="card">
-        <div class="emoji">🌑</div>
-        <h3>Black Holes</h3>
-        <p>A black hole is a region in space where gravity is so strong that nothing — not even light — can escape from it.</p>
+        <div class="card-img" style="background:linear-gradient(135deg,#003344,#05050f)">🪐</div>
+        <div class="card-body"><h3>Saturn's Rings</h3><p>Saturn's iconic ring system stretches up to 282,000 km from the planet, made mostly of ice particles and rocky debris.</p></div>
       </div>
       <div class="card">
-        <div class="emoji">⭐</div>
-        <h3>Stars</h3>
-        <p>Stars are giant balls of hot gas. Our Sun is a star. There are billions of stars in the Milky Way alone.</p>
+        <div class="card-img" style="background:linear-gradient(135deg,#1a1a00,#05050f)">⭐</div>
+        <div class="card-body"><h3>Stellar Nurseries</h3><p>Nebulae are the birthplaces of stars — vast clouds of gas and dust where gravity causes matter to collapse and ignite.</p></div>
       </div>
       <div class="card">
-        <div class="emoji">🌌</div>
-        <h3>Galaxies</h3>
-        <p>A galaxy is a system of millions or billions of stars, gas, and dust held together by gravity.</p>
+        <div class="card-img" style="background:linear-gradient(135deg,#0a002b,#05050f)">🌑</div>
+        <div class="card-body"><h3>Black Holes</h3><p>So dense that not even light can escape, black holes warp spacetime itself. Supermassive ones lurk at the heart of most galaxies.</p></div>
       </div>
       <div class="card">
-        <div class="emoji">🌠</div>
-        <h3>Meteor Showers</h3>
-        <p>Meteor showers happen when Earth passes through debris left by comets. They can be seen with the naked eye.</p>
+        <div class="card-img" style="background:linear-gradient(135deg,#002b1a,#05050f)">🌠</div>
+        <div class="card-body"><h3>Meteor Showers</h3><p>When Earth passes through comet debris trails, we're treated to spectacular showers like the Perseids and Leonids.</p></div>
       </div>
       <div class="card">
-        <div class="emoji">🚀</div>
-        <h3>Space Exploration</h3>
-        <p>Humans first landed on the Moon in 1969. Today, we are working on missions to Mars and beyond.</p>
+        <div class="card-img" style="background:linear-gradient(135deg,#2b0a00,#05050f)">☀️</div>
+        <div class="card-body"><h3>Our Sun</h3><p>A medium-sized star 109 times wider than Earth, the Sun contains 99.86% of the Solar System's total mass.</p></div>
       </div>
     </div>
-  </div>
+  </section>
  
   <!-- CONTACT -->
-  <div class="page" id="contact">
-    <h2>Contact</h2>
-    <p>Have a question or suggestion? Fill out the form below and I'll get back to you.</p>
- 
-    <form onsubmit="submitForm(event)">
-      <div class="form-group">
-        <label for="name">Your Name</label>
-        <input type="text" id="name" placeholder="Enter your name" />
+  <section class="page" id="contact">
+    <h2 class="section-title">Contact <span>Us</span></h2>
+    <p class="section-sub">// send a transmission from Earth</p>
+    <div class="contact-wrapper">
+      <div id="contact-form">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" placeholder="e.g. Neil Armstrong" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="you@galaxy.com" />
+        </div>
+        <div class="form-group">
+          <label for="topic">Topic</label>
+          <select id="topic">
+            <option value="">-- Select a topic --</option>
+            <option>General Inquiry</option>
+            <option>Astronomy Question</option>
+            <option>Collaboration</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" placeholder="What's on your mind..."></textarea>
+        </div>
+        <button class="btn btn-primary" id="send-btn" style="width:100%">Send Transmission</button>
       </div>
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" placeholder="Enter your email" />
+      <div class="form-success" id="form-success">
+        <div class="icon">🛸</div>
+        <h3>Transmission Received!</h3>
+        <p>Thanks for reaching out. We'll respond faster than the speed of light (almost).</p>
       </div>
-      <div class="form-group">
-        <label for="subject">Subject</label>
-        <select id="subject">
-          <option value="">-- Select --</option>
-          <option>General Question</option>
-          <option>Space Fact Suggestion</option>
-          <option>Report an Issue</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="message">Message</label>
-        <textarea id="message" placeholder="Write your message here..."></textarea>
-      </div>
-      <button type="submit">Send Message</button>
-      <p id="success-msg">Message sent successfully! Thank you.</p>
-    </form>
-  </div>
+    </div>
+  </section>
  
   <footer>
-    <p>Space Facts Website — Web Programming Course Project &copy; 2026</p>
+    <p>© 2026 <span>CosmosHub</span> — Built for the Web Programming Course</p>
   </footer>
  
   <script>
-    function showPage(id) {
+    /* ===== STAR FIELD ===== */
+    var canvas = document.getElementById('stars-canvas');
+    var ctx = canvas.getContext('2d');
+    var stars = [];
+ 
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+ 
+    function createStars() {
+      stars = [];
+      for (var i = 0; i < 200; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 1.5 + 0.2,
+          alpha: Math.random(),
+          speed: Math.random() * 0.005 + 0.002,
+          dir: Math.random() > 0.5 ? 1 : -1
+        });
+      }
+    }
+ 
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (var i = 0; i < stars.length; i++) {
+        var s = stars[i];
+        s.alpha += s.speed * s.dir;
+        if (s.alpha >= 1 || s.alpha <= 0) s.dir *= -1;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(200,220,255,' + s.alpha + ')';
+        ctx.fill();
+      }
+      requestAnimationFrame(drawStars);
+    }
+ 
+    resizeCanvas();
+    createStars();
+    drawStars();
+    window.addEventListener('resize', function() { resizeCanvas(); createStars(); });
+ 
+    /* ===== PAGE NAVIGATION ===== */
+    function showPage(pageId) {
       var pages = document.querySelectorAll('.page');
       for (var i = 0; i < pages.length; i++) {
         pages[i].classList.remove('active');
       }
-      document.getElementById(id).classList.add('active');
+      var links = document.querySelectorAll('.nav-link');
+      for (var i = 0; i < links.length; i++) {
+        links[i].classList.remove('active');
+      }
+      document.getElementById(pageId).classList.add('active');
+      var activeLinks = document.querySelectorAll('.nav-link[data-page="' + pageId + '"]');
+      for (var i = 0; i < activeLinks.length; i++) {
+        activeLinks[i].classList.add('active');
+      }
     }
  
-    function submitForm(e) {
-      e.preventDefault();
+    var navLinks = document.querySelectorAll('.nav-link');
+    for (var i = 0; i < navLinks.length; i++) {
+      navLinks[i].addEventListener('click', function(e) {
+        e.preventDefault();
+        showPage(this.getAttribute('data-page'));
+      });
+    }
  
-      var name = document.getElementById('name').value;
-      var email = document.getElementById('email').value;
-      var message = document.getElementById('message').value;
- 
-      if (name == '' || email == '' || message == '') {
-        alert('Please fill in all required fields.');
+    /* ===== CONTACT FORM ===== */
+    document.getElementById('send-btn').addEventListener('click', function() {
+      var name    = document.getElementById('name').value.trim();
+      var email   = document.getElementById('email').value.trim();
+      var message = document.getElementById('message').value.trim();
+      if (name === '' || email === '' || message === '') {
+        alert('Please fill in your Name, Email, and Message!');
         return;
       }
- 
-      document.getElementById('success-msg').style.display = 'block';
- 
-      document.getElementById('name').value = '';
-      document.getElementById('email').value = '';
-      document.getElementById('message').value = '';
-    }
+      document.getElementById('contact-form').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    });
   </script>
  
 </body>
