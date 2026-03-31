@@ -7,14 +7,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
   <style>
 
-    /* ── RESET ── */
+    /* RESET */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    /* ── BODY ── */
+    /* BODY */
     body {
       background-color: #050a14;
       color: #e2e8f0;
@@ -22,7 +22,7 @@
       line-height: 1.7;
     }
 
-    /* ── NAV ── */
+    /* NAV */
     nav {
       position: fixed;
       top: 0;
@@ -64,7 +64,7 @@
       color: #4f9fff;
     }
 
-    /* ── SECTION BASE ── */
+    /*SECTION BASE */
     section {
       padding: 90px 5% 60px;
       scroll-margin-top: 60px;
@@ -86,7 +86,7 @@
       margin-bottom: 14px;
     }
 
-    /* ── HERO ── */
+    /* HERO */
     #home {
       min-height: 100vh;
       display: flex;
@@ -165,7 +165,7 @@
       color: #4f9fff;
     }
 
-    /* ── TICKER ── */
+    /* TICKER */
     .ticker-wrap {
       background-color: #0b1628;
       border-top: 1px solid #1a2e4a;
@@ -215,7 +215,7 @@
       to   { transform: translateX(-50%); }
     }
 
-    /* ── ABOUT ── */
+    /* ABOUT */
     #about {
       background-color: #050a14;
     }
@@ -270,7 +270,7 @@
       margin-top: 4px;
     }
 
-    /* ── FEATURED ── */
+    /* FEATURED */
     #featured {
       background-color: #0b1628;
     }
@@ -333,7 +333,7 @@
       border: 1px solid #1a2e4a;
     }
 
-    /* ── EXPLORE ── */
+    /* EXPLORE */
     #explore {
       background-color: #050a14;
     }
@@ -377,7 +377,7 @@
       color: #7a8fa8;
     }
 
-    /* ── TIMELINE ── */
+    /* TIMELINE */
     #timeline {
       background-color: #0b1628;
     }
@@ -428,7 +428,7 @@
       color: #7a8fa8;
     }
 
-    /* ── CONTACT ── */
+    /* CONTACT */
     #contact {
       background-color: #050a14;
     }
@@ -501,7 +501,7 @@
       margin-bottom: 8px;
     }
 
-    /* ── FOOTER ── */
+    /* FOOTER */
     footer {
       background-color: #0b1628;
       border-top: 1px solid #1a2e4a;
@@ -793,8 +793,7 @@
 </footer>
 <script>
 
-// 1. OBJECTS & ARRAYS: Storing data for dynamic rendering (Module 4)
-// 1. UPDATED ARRAY: Includes all items from your screenshot
+//  Storing data for dynamic rendering
 const exoplanets = [
   { name: "Milky Way Galaxy", distance: "0 ly", type: "Feature", icon: "🌌" },
   { name: "Saturn's Rings", distance: "1.2B km", type: "Feature", icon: "🪐" },
@@ -813,7 +812,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
 });
 
-// 3. UPDATED RENDER FUNCTION: Now uses the icon from the array
 function renderExoplanets() {
     filterPlanets('All'); // Just call the filter function to show all initially
 }
@@ -876,7 +874,7 @@ function setupEventListeners() {
     });
 }
 
-// 5. FORM SUBMISSION: Accessing Control Values (Module 4)
+// Accessing Control Values
 function submitForm() {
     const nameValue = document.getElementById('name').value;
     const emailValue = document.getElementById('email').value;
@@ -886,27 +884,32 @@ function submitForm() {
         return;
     }
 
-    // Resetting values (Module 4)
+    // Resetting values 
     document.getElementById('name').value = '';
     document.getElementById('email').value = '';
     document.getElementById('msg').value = '';
     document.getElementById('topic').selectedIndex = 0;
     document.getElementById('consent').checked = false;
 
-    // UI Feedback (Module 5)
+    // UI Feedback
     document.getElementById('contactForm').style.display = 'none';
     const successMsg = document.getElementById('success');
     successMsg.style.display = 'block';
     successMsg.style.border = "2px solid #4f9fff";
 }
 
-// 6. CANVAS & DRAWING: (Module 5)
+// Canvas and Drawing 
 function initStars() {
     const canvas = document.getElementById("spaceCanvas");
     const ctx = canvas.getContext("2d");
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
 
     let stars = [];
     let count = 0;
@@ -935,29 +938,8 @@ function initStars() {
     animate();
 }
 
-function filterPlanets(filterType) {
-    const exploreGrid = document.querySelector('.explore-grid');
-    // 1. Clear the current visible planets
-    exploreGrid.innerHTML = '';
-    
-    // 2. Loop through and only add the ones that match the filter
-    for (let i = 0; i < exoplanets.length; i++) {
-        const planet = exoplanets[i];
-        
-        if (filterType === 'All' || planet.type === filterType) {
-            const card = document.createElement('div');
-            card.className = 'exp-card';
-            card.innerHTML = `
-                <span class="exp-icon">🔭</span>
-                <h3>${planet.name}</h3>
-                <p>Type: ${planet.type}<br>Distance: ${planet.distance}</p>
-            `;
-            exploreGrid.appendChild(card);
-        }
-    }
-}
 
-// 7. SCROLL LOGIC
+// Scroll Logic
 window.onscroll = function() {
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('.nav-links a');
