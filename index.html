@@ -4,297 +4,563 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CosmosHub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --bg: #050a14;
-      --surface: #0b1628;
-      --surface2: #0f1e36;
-      --accent: #4f9fff;
-      --accent2: #a78bfa;
-      --text: #e2e8f0;
-      --muted: #7a8fa8;
-      --border: rgba(79,159,255,0.15);
+
+    /* ── RESET ── */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
-    html { scroll-behavior: smooth; }
-    /* offset for fixed nav */
-    section[id] { scroll-margin-top: 70px; }
- 
+
+    /* ── BODY ── */
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
+      background-color: #050a14;
+      color: #e2e8f0;
+      font-family: 'Poppins', sans-serif;
       line-height: 1.7;
     }
- 
-    /* ── STARFIELD ── */
-    #stars {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-    }
-    .star {
-      position: absolute; border-radius: 50%; background: #fff;
-      animation: twinkle var(--dur) ease-in-out infinite alternate;
-    }
-    @keyframes twinkle { from { opacity: 0.1; } to { opacity: 0.9; } }
- 
+
     /* ── NAV ── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 5%; backdrop-filter: blur(12px);
-      background: rgba(5,10,20,0.85);
-      border-bottom: 1px solid var(--border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: #050a14;
+      border-bottom: 1px solid #1a2e4a;
+      padding: 14px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
+
     .nav-logo {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.3rem; font-weight: 700;
-      color: var(--accent); letter-spacing: 0.05em;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #4f9fff;
     }
-    .nav-logo span { color: var(--text); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
+
+    .nav-logo span {
+      color: #e2e8f0;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
     .nav-links a {
-      text-decoration: none; color: var(--muted); font-size: 0.9rem;
-      letter-spacing: 0.05em; transition: color 0.2s;
+      text-decoration: none;
+      color: #7a8fa8;
+      font-size: 0.9rem;
     }
-    .nav-links a:hover { color: var(--accent); }
- 
-    /* ── SECTIONS ── */
-    section { position: relative; z-index: 1; padding: 6rem 5%; }
+
+    .nav-links a:hover {
+      color: #4f9fff;
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 90px 5% 60px;
+      scroll-margin-top: 60px;
+    }
+
     .section-label {
-      font-family: 'Orbitron', sans-serif; font-size: 0.72rem;
-      color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase;
-      margin-bottom: 0.75rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      color: #4f9fff;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
     }
+
     h2 {
-      font-family: 'Orbitron', sans-serif; font-size: clamp(1.6rem, 3vw, 2.4rem);
-      font-weight: 700; line-height: 1.2; margin-bottom: 1rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 14px;
     }
- 
+
     /* ── HERO ── */
     #home {
-      min-height: 100vh; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       padding: 0 5%;
     }
+
     .hero-badge {
-      display: inline-block; padding: 0.35rem 1rem;
-      background: rgba(79,159,255,0.1); border: 1px solid var(--border);
-      border-radius: 999px; font-size: 0.8rem; color: var(--accent);
-      letter-spacing: 0.1em; margin-bottom: 1.5rem;
-      animation: fadeUp 0.8s ease both;
+      display: inline-block;
+      padding: 6px 18px;
+      background-color: #0b1628;
+      border: 1px solid #1a2e4a;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: #4f9fff;
+      margin-bottom: 20px;
     }
+
     .hero-title {
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(2.4rem, 7vw, 5.5rem);
-      font-weight: 900; line-height: 1.05;
-      background: linear-gradient(135deg, #fff 30%, var(--accent) 70%, var(--accent2));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: fadeUp 0.9s ease 0.1s both;
+      font-size: 3.8rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.1;
     }
+
+    .hero-title span {
+      color: #4f9fff;
+    }
+
     .hero-sub {
-      max-width: 560px; color: var(--muted); margin: 1.25rem auto 2.5rem;
-      font-size: 1.05rem; animation: fadeUp 1s ease 0.2s both;
+      max-width: 520px;
+      color: #7a8fa8;
+      margin: 18px auto 32px;
+      font-size: 1rem;
     }
-    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: fadeUp 1s ease 0.3s both; }
+
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+    }
+
     .btn {
-      padding: 0.75rem 1.75rem; border-radius: 8px; font-size: 0.95rem;
-      font-weight: 600; cursor: pointer; transition: all 0.25s; border: none;
-      font-family: 'Inter', sans-serif; text-decoration: none; display: inline-block;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: 'Poppins', sans-serif;
+      text-decoration: none;
+      display: inline-block;
     }
+
     .btn-primary {
-      background: var(--accent); color: #050a14;
+      background-color: #4f9fff;
+      color: #050a14;
     }
-    .btn-primary:hover { background: #7ab8ff; transform: translateY(-2px); }
+
+    .btn-primary:hover {
+      background-color: #7ab8ff;
+    }
+
     .btn-outline {
-      background: transparent; color: var(--text);
-      border: 1px solid var(--border);
+      background-color: transparent;
+      color: #e2e8f0;
+      border: 1px solid #1a2e4a;
     }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
- 
-    .hero-scroll {
-      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
-      color: var(--muted); font-size: 0.75rem; letter-spacing: 0.1em; animation: fadeUp 1s ease 0.5s both;
+
+    .btn-outline:hover {
+      border-color: #4f9fff;
+      color: #4f9fff;
     }
-    .hero-scroll-line {
-      width: 1px; height: 40px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-    @keyframes scrollPulse { 0%,100%{opacity:0.3;} 50%{opacity:1;} }
- 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
- 
-    /* ── FACT TICKER ── */
+
+    /* ── TICKER ── */
     .ticker-wrap {
-      background: rgba(79,159,255,0.07);
-      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      padding: 0.7rem 0; overflow: hidden; position: relative; z-index: 1;
+      background-color: #0b1628;
+      border-top: 1px solid #1a2e4a;
+      border-bottom: 1px solid #1a2e4a;
+      padding: 10px 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
     }
+
     .ticker-label {
-      position: absolute; left: 0; top: 0; bottom: 0;
-      background: var(--accent); color: #050a14; font-family: 'Orbitron', sans-serif;
-      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
-      display: flex; align-items: center; padding: 0 1rem; z-index: 2;
-      white-space: nowrap;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background-color: #4f9fff;
+      color: #050a14;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      z-index: 2;
     }
+
     .ticker-track {
-      display: flex; gap: 3rem; animation: ticker 40s linear infinite;
-      padding-left: 160px; white-space: nowrap;
+      display: flex;
+      gap: 3rem;
+      padding-left: 160px;
+      white-space: nowrap;
+      animation: ticker 40s linear infinite;
     }
-    .ticker-track span { color: var(--muted); font-size: 0.85rem; }
-    .ticker-track span strong { color: var(--text); }
-    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
- 
+
+    .ticker-track span {
+      color: #7a8fa8;
+      font-size: 0.85rem;
+    }
+
+    .ticker-track span strong {
+      color: #e2e8f0;
+    }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
     /* ── ABOUT ── */
-    #about .about-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
-      max-width: 1100px; margin: 0 auto;
+    #about {
+      background-color: #050a14;
     }
-    .about-text p { color: var(--muted); margin-bottom: 1rem; }
-    .about-text p strong { color: var(--text); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .about-text p {
+      color: #7a8fa8;
+      margin-bottom: 14px;
+    }
+
+    .about-text p strong {
+      color: #e2e8f0;
+    }
+
     .stats-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
     }
+
     .stat-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 1.25rem; text-align: center;
-      transition: border-color 0.25s, transform 0.25s;
+      background-color: #0b1628;
+      border: 1px solid #1a2e4a;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
     }
-    .stat-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+    .stat-card:hover {
+      border-color: #4f9fff;
+    }
+
     .stat-value {
-      font-family: 'Orbitron', sans-serif; font-size: 1.6rem;
-      font-weight: 700; color: var(--accent); display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #4f9fff;
+      display: block;
     }
-    .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
- 
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #7a8fa8;
+      margin-top: 4px;
+    }
+
     /* ── FEATURED ── */
-    #featured { background: var(--surface2); }
-    #featured .feat-inner { max-width: 1100px; margin: 0 auto; }
-    .feat-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; }
+    #featured {
+      background-color: #0b1628;
+    }
+
+    .feat-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
     .feat-cards {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 2rem;
     }
+
     .feat-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; overflow: hidden;
-      transition: transform 0.25s, border-color 0.25s;
+      background-color: #050a14;
+      border: 1px solid #1a2e4a;
+      border-radius: 14px;
+      overflow: hidden;
     }
-    .feat-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+
+    .feat-card:hover {
+      border-color: #4f9fff;
+    }
+
     .feat-card-img {
-      height: 140px; display: flex; align-items: center; justify-content: center;
+      height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 3.5rem;
-      background: linear-gradient(135deg, rgba(79,159,255,0.12), rgba(167,139,250,0.12));
+      background-color: #0f1e36;
     }
-    .feat-card-body { padding: 1.1rem 1.25rem; }
-    .feat-card-body h3 { font-size: 1rem; margin-bottom: 0.4rem; }
-    .feat-card-body p { font-size: 0.83rem; color: var(--muted); }
+
+    .feat-card-body {
+      padding: 16px 20px;
+    }
+
+    .feat-card-body h3 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .feat-card-body p {
+      font-size: 0.83rem;
+      color: #7a8fa8;
+    }
+
     .feat-tag {
-      display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px;
-      font-size: 0.7rem; font-weight: 600; margin-bottom: 0.5rem;
-      background: rgba(79,159,255,0.12); color: var(--accent);
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      background-color: #0f1e36;
+      color: #4f9fff;
+      border: 1px solid #1a2e4a;
     }
- 
+
     /* ── EXPLORE ── */
-    #explore .explore-inner { max-width: 1100px; margin: 0 auto; }
+    #explore {
+      background-color: #050a14;
+    }
+
+    .explore-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
     .explore-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
-      margin-top: 2.5rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 2rem;
     }
+
     .exp-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 1.75rem;
-      transition: transform 0.25s, border-color 0.25s;
+      background-color: #0b1628;
+      border: 1px solid #1a2e4a;
+      border-radius: 14px;
+      padding: 28px;
     }
-    .exp-card:hover { transform: translateY(-4px); border-color: var(--accent2); }
-    .exp-icon { font-size: 2.2rem; margin-bottom: 0.9rem; display: block; }
-    .exp-card h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
-    .exp-card p { font-size: 0.85rem; color: var(--muted); }
- 
+
+    .exp-card:hover {
+      border-color: #a78bfa;
+    }
+
+    .exp-icon {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .exp-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .exp-card p {
+      font-size: 0.85rem;
+      color: #7a8fa8;
+    }
+
     /* ── TIMELINE ── */
-    #timeline { background: var(--surface2); }
-    #timeline .tl-inner { max-width: 800px; margin: 0 auto; }
-    .tl-list { position: relative; margin-top: 2.5rem; padding-left: 2rem; }
-    .tl-list::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 2px; background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+    #timeline {
+      background-color: #0b1628;
     }
+
+    .tl-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .tl-list {
+      margin-top: 2rem;
+      padding-left: 30px;
+      border-left: 2px solid #4f9fff;
+    }
+
     .tl-item {
-      position: relative; padding: 0 0 2.5rem 2rem;
+      padding: 0 0 30px 24px;
+      position: relative;
     }
+
     .tl-item::before {
-      content: ''; position: absolute; left: -5px; top: 6px;
-      width: 12px; height: 12px; border-radius: 50%;
-      background: var(--accent); border: 2px solid var(--bg);
-      box-shadow: 0 0 8px var(--accent);
+      content: '';
+      position: absolute;
+      left: -7px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #4f9fff;
+      border: 2px solid #050a14;
     }
+
     .tl-year {
-      font-family: 'Orbitron', sans-serif; font-size: 0.75rem;
-      color: var(--accent); letter-spacing: 0.15em; margin-bottom: 0.3rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      color: #4f9fff;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
     }
-    .tl-item h3 { font-size: 1rem; margin-bottom: 0.3rem; }
-    .tl-item p { font-size: 0.85rem; color: var(--muted); }
- 
+
+    .tl-item h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .tl-item p {
+      font-size: 0.85rem;
+      color: #7a8fa8;
+    }
+
     /* ── CONTACT ── */
-    #contact .contact-inner {
-      max-width: 700px; margin: 0 auto;
+    #contact {
+      background-color: #050a14;
     }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-    .form-group.full { grid-column: 1 / -1; }
-    label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.05em; }
+
+    .contact-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 2rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.8rem;
+      color: #7a8fa8;
+    }
+
     input, select, textarea {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; color: var(--text); font-family: 'Inter', sans-serif;
-      font-size: 0.9rem; padding: 0.7rem 1rem; outline: none;
-      transition: border-color 0.2s;
+      background-color: #0b1628;
+      border: 1px solid #1a2e4a;
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      padding: 10px 14px;
+      outline: none;
     }
-    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
-    select option { background: var(--surface); }
-    textarea { resize: vertical; min-height: 130px; }
-    .form-group.full .btn { margin-top: 0.5rem; width: 100%; justify-content: center; }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #4f9fff;
+    }
+
+    select option {
+      background-color: #0b1628;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 130px;
+    }
+
     .success-msg {
-      display: none; margin-top: 1.5rem; background: rgba(79,159,255,0.1);
-      border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem;
-      text-align: center; color: var(--muted);
+      display: none;
+      margin-top: 20px;
+      background-color: #0b1628;
+      border: 1px solid #1a2e4a;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      color: #7a8fa8;
     }
-    .success-msg .icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
- 
+
+    .success-msg .icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
     /* ── FOOTER ── */
     footer {
-      position: relative; z-index: 1;
-      background: var(--surface); border-top: 1px solid var(--border);
-      padding: 2.5rem 5%;
+      background-color: #0b1628;
+      border-top: 1px solid #1a2e4a;
+      padding: 30px 5%;
     }
+
     .footer-inner {
-      max-width: 1100px; margin: 0 auto;
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 1rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
     }
-    .footer-logo { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--accent); }
-    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
-    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
-    .footer-links a:hover { color: var(--accent); }
-    .footer-copy { color: var(--muted); font-size: 0.8rem; width: 100%; text-align: center; margin-top: 1rem; }
- 
-    @media (max-width: 768px) {
-      #about .about-grid, .feat-cards, .explore-grid { grid-template-columns: 1fr; }
-      .form-grid { grid-template-columns: 1fr; }
-      .feat-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+
+    .footer-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      color: #4f9fff;
     }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: #7a8fa8;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+
+    .footer-links a:hover {
+      color: #4f9fff;
+    }
+
+    .footer-copy {
+      color: #7a8fa8;
+      font-size: 0.8rem;
+      width: 100%;
+      text-align: center;
+      margin-top: 10px;
+    }
+    #spaceCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: #050a14;
+    }
+
   </style>
 </head>
 <body>
- 
-<!-- STARFIELD -->
-<div id="stars"></div>
- 
+<canvas id="spaceCanvas"></canvas>
 <!-- NAV -->
 <nav>
   <div class="nav-logo">Cosmos<span>Hub</span></div>
@@ -307,41 +573,37 @@
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
- 
+
 <!-- HERO -->
 <section id="home">
   <div class="hero-badge">🚀 Welcome to the Universe</div>
-  <h1 class="hero-title">Explore the Cosmos</h1>
+  <h1 class="hero-title">Explore the <span>Cosmos</span></h1>
   <p class="hero-sub">Journey beyond the stars. Discover galaxies, nebulae, and the mysteries that lie in the infinite expanse of space.</p>
   <div class="hero-btns">
     <a href="#explore" class="btn btn-primary">Start Exploring</a>
     <a href="#about" class="btn btn-outline">Learn More</a>
   </div>
-  <div class="hero-scroll">
-    <span>SCROLL</span>
-    <div class="hero-scroll-line"></div>
-  </div>
 </section>
- 
+
 <!-- FACT TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-label">SPACE FACTS</div>
-  <div class="ticker-track" id="ticker">
+  <div class="ticker-track">
     <span>🌌 The observable universe is <strong>93 billion light-years</strong> in diameter</span>
-    <span>⭐ A teaspoon of neutron star material weighs <strong>about 10 million tons</strong></span>
+    <span>⭐ A teaspoon of neutron star weighs <strong>about 10 million tons</strong></span>
     <span>🪐 One day on Venus is longer than <strong>one year on Venus</strong></span>
-    <span>🌑 Sagittarius A*, our galaxy's black hole, has a mass of <strong>4 million suns</strong></span>
-    <span>☀️ Light from the Sun takes <strong>8 minutes 20 seconds</strong> to reach Earth</span>
-    <span>🌠 The Andromeda Galaxy is approaching us at <strong>110 km per second</strong></span>
+    <span>🌑 Sagittarius A* has a mass of <strong>4 million suns</strong></span>
+    <span>☀️ Sunlight takes <strong>8 minutes 20 seconds</strong> to reach Earth</span>
+    <span>🌠 Andromeda is approaching us at <strong>110 km per second</strong></span>
     <span>🌌 The observable universe is <strong>93 billion light-years</strong> in diameter</span>
-    <span>⭐ A teaspoon of neutron star material weighs <strong>about 10 million tons</strong></span>
+    <span>⭐ A teaspoon of neutron star weighs <strong>about 10 million tons</strong></span>
     <span>🪐 One day on Venus is longer than <strong>one year on Venus</strong></span>
-    <span>🌑 Sagittarius A*, our galaxy's black hole, has a mass of <strong>4 million suns</strong></span>
-    <span>☀️ Light from the Sun takes <strong>8 minutes 20 seconds</strong> to reach Earth</span>
-    <span>🌠 The Andromeda Galaxy is approaching us at <strong>110 km per second</strong></span>
+    <span>🌑 Sagittarius A* has a mass of <strong>4 million suns</strong></span>
+    <span>☀️ Sunlight takes <strong>8 minutes 20 seconds</strong> to reach Earth</span>
+    <span>🌠 Andromeda is approaching us at <strong>110 km per second</strong></span>
   </div>
 </div>
- 
+
 <!-- ABOUT -->
 <section id="about">
   <div class="about-grid">
@@ -360,16 +622,12 @@
     </div>
   </div>
 </section>
- 
+
 <!-- FEATURED -->
 <section id="featured">
   <div class="feat-inner">
-    <div class="feat-header">
-      <div>
-        <p class="section-label">// editor's picks</p>
-        <h2>Featured Topics</h2>
-      </div>
-    </div>
+    <p class="section-label">// editor's picks</p>
+    <h2>Featured Topics</h2>
     <div class="feat-cards">
       <div class="feat-card">
         <div class="feat-card-img">🔭</div>
@@ -384,7 +642,7 @@
         <div class="feat-card-body">
           <span class="feat-tag">Exploration</span>
           <h3>Mars Colonization Plans</h3>
-          <p>Humanity's ambition to become a multi-planetary species — the science and the challenges of living on Mars.</p>
+          <p>Humanity's ambition to become a multi-planetary species — the science and challenges of living on Mars.</p>
         </div>
       </div>
       <div class="feat-card">
@@ -398,23 +656,23 @@
     </div>
   </div>
 </section>
- 
+
 <!-- EXPLORE -->
 <section id="explore">
   <div class="explore-inner">
     <p class="section-label">// cosmic wonders await</p>
     <h2>Explore the Universe</h2>
     <div class="explore-grid">
-      <div class="exp-card"><span class="exp-icon">🌌</span><h3>Milky Way Galaxy</h3><p>Our home galaxy spans over 100,000 light-years and contains between 100–400 billion stars — including our very own Sun.</p></div>
-      <div class="exp-card"><span class="exp-icon">🪐</span><h3>Saturn's Rings</h3><p>Saturn's iconic ring system stretches up to 282,000 km from the planet, made mostly of ice particles and rocky debris.</p></div>
-      <div class="exp-card"><span class="exp-icon">⭐</span><h3>Stellar Nurseries</h3><p>Nebulae are the birthplaces of stars — vast clouds of gas and dust where gravity causes matter to collapse and ignite.</p></div>
-      <div class="exp-card"><span class="exp-icon">🌑</span><h3>Black Holes</h3><p>So dense that not even light can escape, black holes warp spacetime itself. Supermassive ones lurk at the heart of most galaxies.</p></div>
-      <div class="exp-card"><span class="exp-icon">🌠</span><h3>Meteor Showers</h3><p>When Earth passes through comet debris trails, we're treated to spectacular showers like the Perseids and Leonids.</p></div>
+      <div class="exp-card"><span class="exp-icon">🌌</span><h3>Milky Way Galaxy</h3><p>Our home galaxy spans over 100,000 light-years and contains between 100–400 billion stars.</p></div>
+      <div class="exp-card"><span class="exp-icon">🪐</span><h3>Saturn's Rings</h3><p>Saturn's ring system stretches up to 282,000 km from the planet, made mostly of ice and rocky debris.</p></div>
+      <div class="exp-card"><span class="exp-icon">⭐</span><h3>Stellar Nurseries</h3><p>Nebulae are the birthplaces of stars — vast clouds of gas and dust where gravity causes matter to ignite.</p></div>
+      <div class="exp-card"><span class="exp-icon">🌑</span><h3>Black Holes</h3><p>So dense that not even light can escape. Supermassive ones lurk at the heart of most galaxies.</p></div>
+      <div class="exp-card"><span class="exp-icon">🌠</span><h3>Meteor Showers</h3><p>When Earth passes through comet debris trails, we get spectacular showers like the Perseids and Leonids.</p></div>
       <div class="exp-card"><span class="exp-icon">☀️</span><h3>Our Sun</h3><p>A medium-sized star 109 times wider than Earth, the Sun contains 99.86% of the Solar System's total mass.</p></div>
     </div>
   </div>
 </section>
- 
+
 <!-- TIMELINE -->
 <section id="timeline">
   <div class="tl-inner">
@@ -449,13 +707,13 @@
     </div>
   </div>
 </section>
- 
+
 <!-- CONTACT -->
 <section id="contact">
   <div class="contact-inner">
     <p class="section-label">// send a transmission from Earth</p>
     <h2>Contact Us</h2>
-    <div class="form-grid">
+    <div class="form-grid" id="contactForm">
       <div class="form-group">
         <label for="name">Your Name</label>
         <input type="text" id="name" placeholder="Neil Armstrong" />
@@ -489,7 +747,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
@@ -503,42 +761,83 @@
     <div class="footer-copy">© 2026 CosmosHub — Built for the Web Programming Course</div>
   </div>
 </footer>
- 
+
 <script>
-  // Generate stars
-  const container = document.getElementById('stars');
-  for (let i = 0; i < 180; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    const size = Math.random() * 2.5 + 0.5;
-    s.style.cssText = `
-      width:${size}px; height:${size}px;
-      top:${Math.random()*100}%; left:${Math.random()*100}%;
-      --dur:${2 + Math.random()*4}s;
-      animation-delay:${Math.random()*5}s;
-    `;
-    container.appendChild(s);
-  }
- 
-  // Contact form
+  // Contact form submit
   function submitForm() {
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    if (!name || !email) { alert('Please fill in your name and email.'); return; }
-    document.querySelector('.form-grid').style.display = 'none';
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    if (name == '' || email == '') {
+      alert('Please fill in your name and email.');
+      return;
+    }
+    document.getElementById('contactForm').style.display = 'none';
     document.getElementById('success').style.display = 'block';
   }
- 
-  // Smooth nav highlight
-  const sections = document.querySelectorAll('section[id]');
-  const links = document.querySelectorAll('.nav-links a');
-  window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
-    links.forEach(l => {
-      l.style.color = l.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
-    });
+
+  const canvas = document.getElementById("spaceCanvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// Create stars
+let stars = [];
+
+for (let i = 0; i < 120; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: Math.random() * 2,
+    speed: Math.random() * 0.5
   });
+}
+
+// Animation function
+function animateStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (let i = 0; i < stars.length; i++) {
+    let star = stars[i];
+
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Move stars
+    star.y += star.speed;
+
+    // Reset if out of screen
+    if (star.y > canvas.height) {
+      star.y = 0;
+      star.x = Math.random() * canvas.width;
+    }
+  }
+
+  requestAnimationFrame(animateStars);
+}
+
+animateStars();
+  // Nav link highlight on scroll
+  var sections = document.querySelectorAll('section');
+  var navLinks = document.querySelectorAll('.nav-links a');
+
+  window.onscroll = function() {
+    var current = '';
+    for (var i = 0; i < sections.length; i++) {
+      if (window.scrollY >= sections[i].offsetTop - 80) {
+        current = sections[i].getAttribute('id');
+      }
+    }
+    for (var j = 0; j < navLinks.length; j++) {
+      navLinks[j].style.color = '';
+      if (navLinks[j].getAttribute('href') == '#' + current) {
+        navLinks[j].style.color = '#4f9fff';
+      }
+    }
+  };
 </script>
+
 </body>
 </html>
