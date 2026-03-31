@@ -662,14 +662,17 @@
   <div class="explore-inner">
     <p class="section-label">// cosmic wonders await</p>
     <h2>Explore the Universe</h2>
-    <div class="explore-grid">
-      <div class="exp-card"><span class="exp-icon">🌌</span><h3>Milky Way Galaxy</h3><p>Our home galaxy spans over 100,000 light-years and contains between 100–400 billion stars.</p></div>
-      <div class="exp-card"><span class="exp-icon">🪐</span><h3>Saturn's Rings</h3><p>Saturn's ring system stretches up to 282,000 km from the planet, made mostly of ice and rocky debris.</p></div>
-      <div class="exp-card"><span class="exp-icon">⭐</span><h3>Stellar Nurseries</h3><p>Nebulae are the birthplaces of stars — vast clouds of gas and dust where gravity causes matter to ignite.</p></div>
-      <div class="exp-card"><span class="exp-icon">🌑</span><h3>Black Holes</h3><p>So dense that not even light can escape. Supermassive ones lurk at the heart of most galaxies.</p></div>
-      <div class="exp-card"><span class="exp-icon">🌠</span><h3>Meteor Showers</h3><p>When Earth passes through comet debris trails, we get spectacular showers like the Perseids and Leonids.</p></div>
-      <div class="exp-card"><span class="exp-icon">☀️</span><h3>Our Sun</h3><p>A medium-sized star 109 times wider than Earth, the Sun contains 99.86% of the Solar System's total mass.</p></div>
+
+    <div style="margin-bottom: 30px; display: flex; gap: 20px; background: #0b1628; padding: 15px; border-radius: 10px; border: 1px solid #1a2e4a; font-size: 0.9rem;">
+      <span style="color: #4f9fff; font-weight: 600;">Filter by Type:</span>
+      <label style="cursor:pointer"><input type="radio" name="planetFilter" value="All" checked onclick="filterPlanets('All')"> All</label>
+      <label style="cursor:pointer"><input type="radio" name="planetFilter" value="Terrestrial" onclick="filterPlanets('Terrestrial')"> Terrestrial</label>
+      <label style="cursor:pointer"><input type="radio" name="planetFilter" value="Earth-like" onclick="filterPlanets('Earth-like')"> Earth-like</label>
+      <label style="cursor:pointer"><input type="radio" name="planetFilter" value="Feature" onclick="filterPlanets('Feature')"> Space Features</label>
     </div>
+
+
+    <div class="explore-grid"></div>
   </div>
 </section>
 
@@ -713,15 +716,19 @@
   <div class="contact-inner">
     <p class="section-label">// send a transmission from Earth</p>
     <h2>Contact Us</h2>
+    
     <div class="form-grid" id="contactForm">
+      
       <div class="form-group">
         <label for="name">Your Name</label>
         <input type="text" id="name" placeholder="Neil Armstrong" />
       </div>
+      
       <div class="form-group">
         <label for="email">Email Address</label>
         <input type="email" id="email" placeholder="you@cosmos.space" />
       </div>
+
       <div class="form-group full">
         <label for="topic">Topic</label>
         <select id="topic">
@@ -732,14 +739,36 @@
           <option>Other</option>
         </select>
       </div>
+
+      <div class="form-group full">
+        <fieldset style="border: 1px solid #1a2e4a; padding: 20px; border-radius: 10px;">
+          <legend style="padding: 0 10px; color: #4f9fff; font-family: 'Orbitron'; font-size: 0.75rem; letter-spacing: 2px;">MISSION SETTINGS</legend>
+          
+          <p style="font-size: 0.8rem; margin-bottom: 10px; color: #7a8fa8;">Transmission Priority:</p>
+          <div style="display: flex; gap: 20px; font-size: 0.85rem;">
+            <label><input type="radio" name="priority" value="low" checked> Standard</label>
+            <label><input type="radio" name="priority" value="high"> Urgent (FTL)</label>
+          </div>
+
+          
+        </fieldset>
+      </div>
+
       <div class="form-group full">
         <label for="msg">Message</label>
         <textarea id="msg" placeholder="Your message to the cosmos…"></textarea>
       </div>
+  <div style="margin-top: 15px;">
+      <label style="font-size: 0.85rem; color: #e2e8f0;">
+      <input type="checkbox" id="consent"> I agree to the Galactic Privacy Terms
+      </label>
+      </div>
+
       <div class="form-group full">
-        <button class="btn btn-primary" onclick="submitForm()">Send Transmission</button>
+        <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">Send Transmission</button>
       </div>
     </div>
+
     <div class="success-msg" id="success">
       <span class="icon">🛸</span>
       <strong>Transmission Received!</strong>
@@ -747,6 +776,7 @@
     </div>
   </div>
 </section>
+
 
 <!-- FOOTER -->
 <footer>
@@ -761,83 +791,189 @@
     <div class="footer-copy">© 2026 CosmosHub — Built for the Web Programming Course</div>
   </div>
 </footer>
-
 <script>
-  // Contact form submit
-  function submitForm() {
-    var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
-    if (name == '' || email == '') {
-      alert('Please fill in your name and email.');
-      return;
+
+// 1. OBJECTS & ARRAYS: Storing data for dynamic rendering (Module 4)
+// 1. UPDATED ARRAY: Includes all items from your screenshot
+const exoplanets = [
+  { name: "Milky Way Galaxy", distance: "0 ly", type: "Feature", icon: "🌌" },
+  { name: "Saturn's Rings", distance: "1.2B km", type: "Feature", icon: "🪐" },
+  { name: "Stellar Nurseries", distance: "Variable", type: "Feature", icon: "⭐" },
+  { name: "Black Holes", distance: "Various", type: "Feature", icon: "🌑" },
+  { name: "Meteor Showers", distance: "Local", type: "Feature", icon: "🌠" },
+  { name: "Our Sun", distance: "8.3 lm", type: "Feature", icon: "☀️" },
+  { name: "Proxima Centauri b", distance: "4.2 ly", type: "Terrestrial", icon: "🔭" },
+  { name: "TRAPPIST-1e", distance: "40 ly", type: "Earth-like", icon: "🔭" },
+  { name: "Kepler-186f", distance: "582 ly", type: "Habitable Zone", icon: "🔭" }
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+    initStars();
+    renderExoplanets();
+    setupEventListeners();
+});
+
+// 3. UPDATED RENDER FUNCTION: Now uses the icon from the array
+function renderExoplanets() {
+    filterPlanets('All'); // Just call the filter function to show all initially
+}
+
+function filterPlanets(filterType) {
+    const exploreGrid = document.querySelector('.explore-grid');
+    exploreGrid.innerHTML = ''; // Clear the grid
+    
+    for (let i = 0; i < exoplanets.length; i++) {
+        const planet = exoplanets[i];
+        
+        if (filterType === 'All' || planet.type === filterType) {
+            const card = document.createElement('div');
+            card.className = 'exp-card';
+            card.innerHTML = `
+                <span class="exp-icon">${planet.icon}</span>
+                <h3>${planet.name}</h3>
+                <p>Type: ${planet.type}<br>Distance: ${planet.distance}</p>
+            `;
+            exploreGrid.appendChild(card);
+        }
     }
+}
+
+function setupEventListeners() {
+    const msgArea = document.getElementById('msg');
+    const topicSelect = document.getElementById('topic');
+    const consent = document.getElementById('consent');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Hover effects
+    submitBtn.onmouseover = () => {
+        if(!submitBtn.disabled) submitBtn.style.transform = "scale(1.05)";
+    };
+    submitBtn.onmouseout = () => submitBtn.style.transform = "scale(1)";
+
+    // Change event
+    topicSelect.onchange = (e) => {
+        console.log("Selected Topic: " + e.target.value);
+    };
+
+    // Checkbox Logic (Manipulating CSS)
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = "0.5";
+    submitBtn.style.cursor = "not-allowed";
+
+    consent.onchange = (e) => {
+        const isChecked = e.target.checked;
+        submitBtn.disabled = !isChecked;
+        submitBtn.style.opacity = isChecked ? "1" : "0.5";
+        submitBtn.style.cursor = isChecked ? "pointer" : "not-allowed";
+    };
+
+    // Focus/Blur effects
+    msgArea.addEventListener('focus', () => {
+        msgArea.style.backgroundColor = "#101e36";
+    });
+    msgArea.addEventListener('blur', () => {
+        msgArea.style.backgroundColor = "#0b1628";
+    });
+}
+
+// 5. FORM SUBMISSION: Accessing Control Values (Module 4)
+function submitForm() {
+    const nameValue = document.getElementById('name').value;
+    const emailValue = document.getElementById('email').value;
+
+    if (nameValue.trim() === '' || emailValue.trim() === '') {
+        alert('Please provide at least a name and email for the transmission.');
+        return;
+    }
+
+    // Resetting values (Module 4)
+    document.getElementById('name').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('msg').value = '';
+    document.getElementById('topic').selectedIndex = 0;
+    document.getElementById('consent').checked = false;
+
+    // UI Feedback (Module 5)
     document.getElementById('contactForm').style.display = 'none';
-    document.getElementById('success').style.display = 'block';
-  }
-
-  const canvas = document.getElementById("spaceCanvas");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-// Create stars
-let stars = [];
-
-for (let i = 0; i < 120; i++) {
-  stars.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    size: Math.random() * 2,
-    speed: Math.random() * 0.5
-  });
+    const successMsg = document.getElementById('success');
+    successMsg.style.display = 'block';
+    successMsg.style.border = "2px solid #4f9fff";
 }
 
-// Animation function
-function animateStars() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+// 6. CANVAS & DRAWING: (Module 5)
+function initStars() {
+    const canvas = document.getElementById("spaceCanvas");
+    const ctx = canvas.getContext("2d");
 
-  for (let i = 0; i < stars.length; i++) {
-    let star = stars[i];
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    ctx.fillStyle = "white";
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Move stars
-    star.y += star.speed;
-
-    // Reset if out of screen
-    if (star.y > canvas.height) {
-      star.y = 0;
-      star.x = Math.random() * canvas.width;
+    let stars = [];
+    let count = 0;
+    while (count < 150) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2,
+            speed: Math.random() * 0.5
+        });
+        count++;
     }
-  }
 
-  requestAnimationFrame(animateStars);
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        stars.forEach(star => {
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+            ctx.fill();
+            star.y += star.speed;
+            if (star.y > canvas.height) star.y = 0;
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
 }
 
-animateStars();
-  // Nav link highlight on scroll
-  var sections = document.querySelectorAll('section');
-  var navLinks = document.querySelectorAll('.nav-links a');
+function filterPlanets(filterType) {
+    const exploreGrid = document.querySelector('.explore-grid');
+    // 1. Clear the current visible planets
+    exploreGrid.innerHTML = '';
+    
+    // 2. Loop through and only add the ones that match the filter
+    for (let i = 0; i < exoplanets.length; i++) {
+        const planet = exoplanets[i];
+        
+        if (filterType === 'All' || planet.type === filterType) {
+            const card = document.createElement('div');
+            card.className = 'exp-card';
+            card.innerHTML = `
+                <span class="exp-icon">🔭</span>
+                <h3>${planet.name}</h3>
+                <p>Type: ${planet.type}<br>Distance: ${planet.distance}</p>
+            `;
+            exploreGrid.appendChild(card);
+        }
+    }
+}
 
-  window.onscroll = function() {
-    var current = '';
-    for (var i = 0; i < sections.length; i++) {
-      if (window.scrollY >= sections[i].offsetTop - 80) {
-        current = sections[i].getAttribute('id');
-      }
-    }
-    for (var j = 0; j < navLinks.length; j++) {
-      navLinks[j].style.color = '';
-      if (navLinks[j].getAttribute('href') == '#' + current) {
-        navLinks[j].style.color = '#4f9fff';
-      }
-    }
-  };
+// 7. SCROLL LOGIC
+window.onscroll = function() {
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    let current = '';
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 100) {
+            current = section.getAttribute('id');
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.style.color = link.getAttribute('href') === '#' + current ? '#4f9fff' : '';
+    });
+};
 </script>
-
 </body>
 </html>
