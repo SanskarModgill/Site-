@@ -4,574 +4,541 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CosmosHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
- 
     :root {
-      --bg: #05050f;
-      --surface: #0d0d2b;
-      --accent: #00e5ff;
-      --accent2: #7b2fff;
-      --text: #e8eaf6;
-      --muted: #7986cb;
-      --card-bg: rgba(13, 13, 43, 0.85);
-      --glow: 0 0 24px rgba(0, 229, 255, 0.25);
+      --bg: #050a14;
+      --surface: #0b1628;
+      --surface2: #0f1e36;
+      --accent: #4f9fff;
+      --accent2: #a78bfa;
+      --text: #e2e8f0;
+      --muted: #7a8fa8;
+      --border: rgba(79,159,255,0.15);
     }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
  
     html { scroll-behavior: smooth; }
+    /* offset for fixed nav */
+    section[id] { scroll-margin-top: 70px; }
  
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background-color: var(--bg);
+      background: var(--bg);
       color: var(--text);
-      overflow-x: hidden;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
     }
  
-    /* STAR CANVAS */
-    #stars-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
+    /* ── STARFIELD ── */
+    #stars {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
     }
+    .star {
+      position: absolute; border-radius: 50%; background: #fff;
+      animation: twinkle var(--dur) ease-in-out infinite alternate;
+    }
+    @keyframes twinkle { from { opacity: 0.1; } to { opacity: 0.9; } }
  
-    /* NAVBAR */
+    /* ── NAV ── */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 5%;
-      background: rgba(5, 5, 15, 0.75);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 5%; backdrop-filter: blur(12px);
+      background: rgba(5,10,20,0.85);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--accent); letter-spacing: 0.05em;
+    }
+    .nav-logo span { color: var(--text); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--muted); font-size: 0.9rem;
+      letter-spacing: 0.05em; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+ 
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; padding: 6rem 5%; }
+    .section-label {
+      font-family: 'Orbitron', sans-serif; font-size: 0.72rem;
+      color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    h2 {
+      font-family: 'Orbitron', sans-serif; font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700; line-height: 1.2; margin-bottom: 1rem;
     }
  
-    nav .logo {
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: var(--accent);
-      letter-spacing: 2px;
-      border: 2px solid var(--text);
-      padding: 4px 10px;
+    /* ── HERO ── */
+    #home {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 0 5%;
     }
- 
-    nav .logo span { color: var(--accent2); }
- 
-    nav ul { list-style: none; display: flex; gap: 2.5rem; }
- 
-    nav ul a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      transition: color 0.3s;
+    .hero-badge {
+      display: inline-block; padding: 0.35rem 1rem;
+      background: rgba(79,159,255,0.1); border: 1px solid var(--border);
+      border-radius: 999px; font-size: 0.8rem; color: var(--accent);
+      letter-spacing: 0.1em; margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease both;
     }
- 
-    nav ul a:hover, nav ul a.active { color: var(--accent); }
- 
-    /* PAGES */
-    .page {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 7rem 5% 4rem;
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.4rem, 7vw, 5.5rem);
+      font-weight: 900; line-height: 1.05;
+      background: linear-gradient(135deg, #fff 30%, var(--accent) 70%, var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeUp 0.9s ease 0.1s both;
     }
- 
-    .page.active { display: flex; }
- 
-    /* HOME */
-    .hero {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
+    .hero-sub {
+      max-width: 560px; color: var(--muted); margin: 1.25rem auto 2.5rem;
+      font-size: 1.05rem; animation: fadeUp 1s ease 0.2s both;
     }
- 
-    .tag {
-      display: inline-block;
-      font-size: 0.78rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid rgba(0, 229, 255, 0.4);
-      padding: 0.4rem 1.2rem;
-      border-radius: 999px;
-    }
- 
-    h1 {
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      font-weight: 900;
-      line-height: 1.1;
-    }
- 
-    h1 .glow {
-      color: var(--accent);
-      text-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
-      display: block;
-    }
- 
-    .subtitle {
-      max-width: 550px;
-      color: var(--muted);
-      font-size: 1.05rem;
-      line-height: 1.8;
-    }
- 
-    .btn-group {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
- 
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: fadeUp 1s ease 0.3s both; }
     .btn {
-      padding: 0.9rem 2.4rem;
-      border-radius: 4px;
-      font-size: 0.82rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s;
-      font-weight: 700;
+      padding: 0.75rem 1.75rem; border-radius: 8px; font-size: 0.95rem;
+      font-weight: 600; cursor: pointer; transition: all 0.25s; border: none;
+      font-family: 'Inter', sans-serif; text-decoration: none; display: inline-block;
     }
- 
     .btn-primary {
-      background: var(--accent);
-      color: #05050f;
-      box-shadow: var(--glow);
+      background: var(--accent); color: #050a14;
     }
- 
-    .btn-primary:hover {
-      background: #fff;
-      box-shadow: 0 0 40px rgba(0,229,255,0.6);
-      transform: translateY(-2px);
-    }
- 
+    .btn-primary:hover { background: #7ab8ff; transform: translateY(-2px); }
     .btn-outline {
-      background: transparent;
-      color: var(--accent);
-      border: 1px solid rgba(0, 229, 255, 0.5);
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+ 
+    .hero-scroll {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      color: var(--muted); font-size: 0.75rem; letter-spacing: 0.1em; animation: fadeUp 1s ease 0.5s both;
+    }
+    .hero-scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse { 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+ 
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
  
-    .btn-outline:hover {
-      background: rgba(0, 229, 255, 0.08);
-      transform: translateY(-2px);
+    /* ── FACT TICKER ── */
+    .ticker-wrap {
+      background: rgba(79,159,255,0.07);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 0.7rem 0; overflow: hidden; position: relative; z-index: 1;
     }
- 
-    .planet {
-      position: absolute;
-      border-radius: 50%;
-      animation: float 8s ease-in-out infinite;
+    .ticker-label {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      background: var(--accent); color: #050a14; font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+      display: flex; align-items: center; padding: 0 1rem; z-index: 2;
+      white-space: nowrap;
     }
- 
-    .planet-1 {
-      width: 200px; height: 200px;
-      background: radial-gradient(circle at 35% 35%, #7b2fff, #1a0040);
-      right: 6%; top: 15%;
-      box-shadow: 0 0 80px rgba(123,47,255,0.4);
-      opacity: 0.9;
+    .ticker-track {
+      display: flex; gap: 3rem; animation: ticker 40s linear infinite;
+      padding-left: 160px; white-space: nowrap;
     }
+    .ticker-track span { color: var(--muted); font-size: 0.85rem; }
+    .ticker-track span strong { color: var(--text); }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
  
-    .planet-2 {
-      width: 90px; height: 90px;
-      background: radial-gradient(circle at 35% 35%, #00e5ff, #003344);
-      left: 5%; bottom: 22%;
-      box-shadow: 0 0 40px rgba(0,229,255,0.4);
-      opacity: 0.85;
-      animation-delay: -3s;
+    /* ── ABOUT ── */
+    #about .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+      max-width: 1100px; margin: 0 auto;
     }
- 
-    /* ABOUT */
-    .section-title {
-      text-align: center;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
- 
-    .section-title span { color: var(--accent); }
- 
-    .section-sub {
-      color: var(--muted);
-      text-align: center;
-      font-size: 0.9rem;
-      margin-bottom: 3rem;
-      letter-spacing: 1px;
-    }
- 
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      max-width: 900px;
-      width: 100%;
-      align-items: center;
-    }
- 
-    .about-text p {
-      color: var(--muted);
-      line-height: 1.9;
-      margin-bottom: 1.2rem;
-      font-size: 0.98rem;
-    }
- 
+    .about-text p { color: var(--muted); margin-bottom: 1rem; }
     .about-text p strong { color: var(--text); }
- 
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
- 
+    .stats-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
     .stat-card {
-      background: var(--card-bg);
-      border: 1px solid rgba(0,229,255,0.12);
-      border-radius: 8px;
-      padding: 1.5rem;
-      text-align: center;
-      transition: border-color 0.3s, transform 0.3s;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem; text-align: center;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .stat-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .stat-value {
+      font-family: 'Orbitron', sans-serif; font-size: 1.6rem;
+      font-weight: 700; color: var(--accent); display: block;
+    }
+    .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+ 
+    /* ── FEATURED ── */
+    #featured { background: var(--surface2); }
+    #featured .feat-inner { max-width: 1100px; margin: 0 auto; }
+    .feat-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; }
+    .feat-cards {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
+    }
+    .feat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+      transition: transform 0.25s, border-color 0.25s;
+    }
+    .feat-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .feat-card-img {
+      height: 140px; display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      background: linear-gradient(135deg, rgba(79,159,255,0.12), rgba(167,139,250,0.12));
+    }
+    .feat-card-body { padding: 1.1rem 1.25rem; }
+    .feat-card-body h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+    .feat-card-body p { font-size: 0.83rem; color: var(--muted); }
+    .feat-tag {
+      display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px;
+      font-size: 0.7rem; font-weight: 600; margin-bottom: 0.5rem;
+      background: rgba(79,159,255,0.12); color: var(--accent);
     }
  
-    .stat-card:hover {
-      border-color: rgba(0,229,255,0.4);
-      transform: translateY(-4px);
-      box-shadow: var(--glow);
+    /* ── EXPLORE ── */
+    #explore .explore-inner { max-width: 1100px; margin: 0 auto; }
+    .explore-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
+      margin-top: 2.5rem;
     }
- 
-    .stat-num { font-size: 2rem; font-weight: 900; color: var(--accent); }
- 
-    .stat-label {
-      font-size: 0.78rem;
-      color: var(--muted);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-top: 0.3rem;
+    .exp-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.75rem;
+      transition: transform 0.25s, border-color 0.25s;
     }
+    .exp-card:hover { transform: translateY(-4px); border-color: var(--accent2); }
+    .exp-icon { font-size: 2.2rem; margin-bottom: 0.9rem; display: block; }
+    .exp-card h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+    .exp-card p { font-size: 0.85rem; color: var(--muted); }
  
-    /* EXPLORE */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-      max-width: 1100px;
-      width: 100%;
+    /* ── TIMELINE ── */
+    #timeline { background: var(--surface2); }
+    #timeline .tl-inner { max-width: 800px; margin: 0 auto; }
+    .tl-list { position: relative; margin-top: 2.5rem; padding-left: 2rem; }
+    .tl-list::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
     }
- 
-    .card {
-      background: var(--card-bg);
-      border: 1px solid rgba(0,229,255,0.1);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-      cursor: pointer;
+    .tl-item {
+      position: relative; padding: 0 0 2.5rem 2rem;
     }
- 
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 40px rgba(0,229,255,0.2);
+    .tl-item::before {
+      content: ''; position: absolute; left: -5px; top: 6px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent); border: 2px solid var(--bg);
+      box-shadow: 0 0 8px var(--accent);
     }
- 
-    .card-img {
-      width: 100%; height: 160px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4.5rem;
+    .tl-year {
+      font-family: 'Orbitron', sans-serif; font-size: 0.75rem;
+      color: var(--accent); letter-spacing: 0.15em; margin-bottom: 0.3rem;
     }
+    .tl-item h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+    .tl-item p { font-size: 0.85rem; color: var(--muted); }
  
-    .card-body { padding: 1.2rem 1.4rem 1.6rem; }
-    .card-body h3 { color: var(--accent); font-size: 0.95rem; margin-bottom: 0.5rem; letter-spacing: 1px; }
-    .card-body p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
- 
-    /* CONTACT */
-    .contact-wrapper { max-width: 560px; width: 100%; }
- 
-    .form-group { margin-bottom: 1.3rem; }
- 
-    label {
-      display: block;
-      font-size: 0.78rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
+    /* ── CONTACT ── */
+    #contact .contact-inner {
+      max-width: 700px; margin: 0 auto;
     }
- 
-    input, textarea, select {
-      width: 100%;
-      background: var(--card-bg);
-      border: 1px solid rgba(0,229,255,0.15);
-      border-radius: 6px;
-      padding: 0.9rem 1rem;
-      color: var(--text);
-      font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.3s, box-shadow 0.3s;
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.05em; }
+    input, select, textarea {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text); font-family: 'Inter', sans-serif;
+      font-size: 0.9rem; padding: 0.7rem 1rem; outline: none;
+      transition: border-color 0.2s;
     }
- 
-    input:focus, textarea:focus, select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 16px rgba(0,229,255,0.15);
-    }
- 
-    textarea { resize: vertical; min-height: 130px; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
     select option { background: var(--surface); }
- 
-    .form-success {
-      display: none;
-      text-align: center;
-      padding: 2.5rem;
-      background: var(--card-bg);
-      border: 1px solid rgba(0,229,255,0.3);
-      border-radius: 12px;
-      box-shadow: var(--glow);
+    textarea { resize: vertical; min-height: 130px; }
+    .form-group.full .btn { margin-top: 0.5rem; width: 100%; justify-content: center; }
+    .success-msg {
+      display: none; margin-top: 1.5rem; background: rgba(79,159,255,0.1);
+      border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem;
+      text-align: center; color: var(--muted);
     }
+    .success-msg .icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
  
-    .form-success .icon { font-size: 3rem; margin-bottom: 1rem; }
-    .form-success h3 { color: var(--accent); margin-bottom: 0.5rem; }
-    .form-success p { color: var(--muted); font-size: 0.9rem; }
- 
-    /* FOOTER */
+    /* ── FOOTER ── */
     footer {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 2rem;
-      color: var(--muted);
-      font-size: 0.8rem;
-      border-top: 1px solid rgba(0,229,255,0.07);
-      letter-spacing: 1px;
+      position: relative; z-index: 1;
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 2.5rem 5%;
     }
- 
-    footer span { color: var(--accent); }
- 
-    /* ANIMATIONS */
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-20px); }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
     }
+    .footer-logo { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--accent); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent); }
+    .footer-copy { color: var(--muted); font-size: 0.8rem; width: 100%; text-align: center; margin-top: 1rem; }
  
-    /* RESPONSIVE */
-    @media (max-width: 680px) {
-      .about-grid { grid-template-columns: 1fr; }
-      nav ul { gap: 1.2rem; }
-      .planet-1 { width: 110px; height: 110px; }
+    @media (max-width: 768px) {
+      #about .about-grid, .feat-cards, .explore-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .feat-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
     }
   </style>
 </head>
 <body>
  
-  <canvas id="stars-canvas"></canvas>
+<!-- STARFIELD -->
+<div id="stars"></div>
  
-  <!-- NAVBAR -->
-  <nav>
-    <div class="logo">Cosmos<span>Hub</span></div>
-    <ul>
-      <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
-      <li><a href="#" class="nav-link" data-page="about">About</a></li>
-      <li><a href="#" class="nav-link" data-page="explore">Explore</a></li>
-      <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Cosmos<span>Hub</span></div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#featured">Featured</a></li>
+    <li><a href="#explore">Explore</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+ 
+<!-- HERO -->
+<section id="home">
+  <div class="hero-badge">🚀 Welcome to the Universe</div>
+  <h1 class="hero-title">Explore the Cosmos</h1>
+  <p class="hero-sub">Journey beyond the stars. Discover galaxies, nebulae, and the mysteries that lie in the infinite expanse of space.</p>
+  <div class="hero-btns">
+    <a href="#explore" class="btn btn-primary">Start Exploring</a>
+    <a href="#about" class="btn btn-outline">Learn More</a>
+  </div>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+ 
+<!-- FACT TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-label">SPACE FACTS</div>
+  <div class="ticker-track" id="ticker">
+    <span>🌌 The observable universe is <strong>93 billion light-years</strong> in diameter</span>
+    <span>⭐ A teaspoon of neutron star material weighs <strong>about 10 million tons</strong></span>
+    <span>🪐 One day on Venus is longer than <strong>one year on Venus</strong></span>
+    <span>🌑 Sagittarius A*, our galaxy's black hole, has a mass of <strong>4 million suns</strong></span>
+    <span>☀️ Light from the Sun takes <strong>8 minutes 20 seconds</strong> to reach Earth</span>
+    <span>🌠 The Andromeda Galaxy is approaching us at <strong>110 km per second</strong></span>
+    <span>🌌 The observable universe is <strong>93 billion light-years</strong> in diameter</span>
+    <span>⭐ A teaspoon of neutron star material weighs <strong>about 10 million tons</strong></span>
+    <span>🪐 One day on Venus is longer than <strong>one year on Venus</strong></span>
+    <span>🌑 Sagittarius A*, our galaxy's black hole, has a mass of <strong>4 million suns</strong></span>
+    <span>☀️ Light from the Sun takes <strong>8 minutes 20 seconds</strong> to reach Earth</span>
+    <span>🌠 The Andromeda Galaxy is approaching us at <strong>110 km per second</strong></span>
+  </div>
+</div>
+ 
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <p class="section-label">// who we are &amp; what we do</p>
+      <h2>About CosmosHub</h2>
+      <p><strong>CosmosHub</strong> is your gateway to the wonders of the universe. We bring together astronomy enthusiasts, researchers, and curious minds from around the world.</p>
+      <p>From the fiery birth of stars to the silent drift of distant galaxies, we curate knowledge, imagery, and science to make space <strong>accessible to everyone</strong>.</p>
+      <p>Our mission: ignite curiosity, inspire exploration, and remind humanity just how <strong>extraordinary</strong> our universe truly is.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card"><span class="stat-value">200B+</span><div class="stat-label">Galaxies</div></div>
+      <div class="stat-card"><span class="stat-value">13.8B</span><div class="stat-label">Years Old</div></div>
+      <div class="stat-card"><span class="stat-value">5,500+</span><div class="stat-label">Exoplanets</div></div>
+      <div class="stat-card"><span class="stat-value">∞</span><div class="stat-label">Mysteries</div></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- FEATURED -->
+<section id="featured">
+  <div class="feat-inner">
+    <div class="feat-header">
+      <div>
+        <p class="section-label">// editor's picks</p>
+        <h2>Featured Topics</h2>
+      </div>
+    </div>
+    <div class="feat-cards">
+      <div class="feat-card">
+        <div class="feat-card-img">🔭</div>
+        <div class="feat-card-body">
+          <span class="feat-tag">Technology</span>
+          <h3>The James Webb Space Telescope</h3>
+          <p>The most powerful space telescope ever built, revealing galaxies from just 300 million years after the Big Bang.</p>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-card-img">🌍</div>
+        <div class="feat-card-body">
+          <span class="feat-tag">Exploration</span>
+          <h3>Mars Colonization Plans</h3>
+          <p>Humanity's ambition to become a multi-planetary species — the science and the challenges of living on Mars.</p>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-card-img">💫</div>
+        <div class="feat-card-body">
+          <span class="feat-tag">Science</span>
+          <h3>Dark Matter &amp; Dark Energy</h3>
+          <p>Together they make up 95% of the universe, yet we still don't know what they truly are.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- EXPLORE -->
+<section id="explore">
+  <div class="explore-inner">
+    <p class="section-label">// cosmic wonders await</p>
+    <h2>Explore the Universe</h2>
+    <div class="explore-grid">
+      <div class="exp-card"><span class="exp-icon">🌌</span><h3>Milky Way Galaxy</h3><p>Our home galaxy spans over 100,000 light-years and contains between 100–400 billion stars — including our very own Sun.</p></div>
+      <div class="exp-card"><span class="exp-icon">🪐</span><h3>Saturn's Rings</h3><p>Saturn's iconic ring system stretches up to 282,000 km from the planet, made mostly of ice particles and rocky debris.</p></div>
+      <div class="exp-card"><span class="exp-icon">⭐</span><h3>Stellar Nurseries</h3><p>Nebulae are the birthplaces of stars — vast clouds of gas and dust where gravity causes matter to collapse and ignite.</p></div>
+      <div class="exp-card"><span class="exp-icon">🌑</span><h3>Black Holes</h3><p>So dense that not even light can escape, black holes warp spacetime itself. Supermassive ones lurk at the heart of most galaxies.</p></div>
+      <div class="exp-card"><span class="exp-icon">🌠</span><h3>Meteor Showers</h3><p>When Earth passes through comet debris trails, we're treated to spectacular showers like the Perseids and Leonids.</p></div>
+      <div class="exp-card"><span class="exp-icon">☀️</span><h3>Our Sun</h3><p>A medium-sized star 109 times wider than Earth, the Sun contains 99.86% of the Solar System's total mass.</p></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="tl-inner">
+    <p class="section-label">// humanity's journey</p>
+    <h2>Space Exploration Milestones</h2>
+    <div class="tl-list">
+      <div class="tl-item">
+        <div class="tl-year">1957</div>
+        <h3>Sputnik 1 — First Satellite</h3>
+        <p>The Soviet Union launched the world's first artificial satellite, marking the dawn of the Space Age.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1969</div>
+        <h3>Apollo 11 — Moon Landing</h3>
+        <p>Neil Armstrong and Buzz Aldrin became the first humans to walk on the Moon on July 20, 1969.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1990</div>
+        <h3>Hubble Space Telescope</h3>
+        <p>Launched into low Earth orbit, Hubble has captured some of the deepest views of the universe ever seen.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021</div>
+        <h3>James Webb Space Telescope</h3>
+        <p>The most advanced space observatory ever built, designed to observe the universe's first galaxies.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">Future</div>
+        <h3>Crewed Mars Mission</h3>
+        <p>Multiple space agencies and private companies are actively working toward landing humans on Mars.</p>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <p class="section-label">// send a transmission from Earth</p>
+    <h2>Contact Us</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" placeholder="Neil Armstrong" />
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="you@cosmos.space" />
+      </div>
+      <div class="form-group full">
+        <label for="topic">Topic</label>
+        <select id="topic">
+          <option value="">— Select a topic —</option>
+          <option>General Inquiry</option>
+          <option>Astronomy Question</option>
+          <option>Collaboration</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label for="msg">Message</label>
+        <textarea id="msg" placeholder="Your message to the cosmos…"></textarea>
+      </div>
+      <div class="form-group full">
+        <button class="btn btn-primary" onclick="submitForm()">Send Transmission</button>
+      </div>
+    </div>
+    <div class="success-msg" id="success">
+      <span class="icon">🛸</span>
+      <strong>Transmission Received!</strong>
+      <p>Thanks for reaching out. We'll respond faster than the speed of light (almost).</p>
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">CosmosHub</div>
+    <ul class="footer-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#explore">Explore</a></li>
+      <li><a href="#contact">Contact</a></li>
     </ul>
-  </nav>
+    <div class="footer-copy">© 2026 CosmosHub — Built for the Web Programming Course</div>
+  </div>
+</footer>
  
-  <!-- HOME -->
-  <section class="page active" id="home">
-    <div class="planet planet-1"></div>
-    <div class="planet planet-2"></div>
-    <div class="hero">
-      <div class="tag">🚀 Welcome to the Universe</div>
-      <h1>Explore the <span class="glow">Cosmos</span></h1>
-      <p class="subtitle">Journey beyond the stars. Discover galaxies, nebulae, and the mysteries that lie in the infinite expanse of space.</p>
-      <div class="btn-group">
-        <button class="btn btn-primary nav-link" data-page="explore">Start Exploring</button>
-        <button class="btn btn-outline nav-link" data-page="about">Learn More</button>
-      </div>
-    </div>
-  </section>
+<script>
+  // Generate stars
+  const container = document.getElementById('stars');
+  for (let i = 0; i < 180; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      top:${Math.random()*100}%; left:${Math.random()*100}%;
+      --dur:${2 + Math.random()*4}s;
+      animation-delay:${Math.random()*5}s;
+    `;
+    container.appendChild(s);
+  }
  
-  <!-- ABOUT -->
-  <section class="page" id="about">
-    <h2 class="section-title">About <span>CosmosHub</span></h2>
-    <p class="section-sub">// who we are &amp; what we do</p>
-    <div class="about-grid">
-      <div class="about-text">
-        <p><strong>CosmosHub</strong> is your gateway to the wonders of the universe. We bring together astronomy enthusiasts, researchers, and curious minds from around the world.</p>
-        <p>From the fiery birth of stars to the silent drift of distant galaxies, we curate knowledge, imagery, and science to make space <strong>accessible to everyone</strong>.</p>
-        <p>Our mission: ignite curiosity, inspire exploration, and remind humanity just how <strong>extraordinary</strong> our universe truly is.</p>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-num">200B+</div><div class="stat-label">Galaxies</div></div>
-        <div class="stat-card"><div class="stat-num">13.8B</div><div class="stat-label">Years Old</div></div>
-        <div class="stat-card"><div class="stat-num">5,500+</div><div class="stat-label">Exoplanets</div></div>
-        <div class="stat-card"><div class="stat-num">∞</div><div class="stat-label">Mysteries</div></div>
-      </div>
-    </div>
-  </section>
+  // Contact form
+  function submitForm() {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    if (!name || !email) { alert('Please fill in your name and email.'); return; }
+    document.querySelector('.form-grid').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+  }
  
-  <!-- EXPLORE -->
-  <section class="page" id="explore">
-    <h2 class="section-title">Explore the <span>Universe</span></h2>
-    <p class="section-sub">// cosmic wonders await</p>
-    <div class="cards-grid">
-      <div class="card">
-        <div class="card-img" style="background:linear-gradient(135deg,#1a0533,#05050f)">🌌</div>
-        <div class="card-body"><h3>Milky Way Galaxy</h3><p>Our home galaxy spans over 100,000 light-years and contains between 100–400 billion stars — including our very own Sun.</p></div>
-      </div>
-      <div class="card">
-        <div class="card-img" style="background:linear-gradient(135deg,#003344,#05050f)">🪐</div>
-        <div class="card-body"><h3>Saturn's Rings</h3><p>Saturn's iconic ring system stretches up to 282,000 km from the planet, made mostly of ice particles and rocky debris.</p></div>
-      </div>
-      <div class="card">
-        <div class="card-img" style="background:linear-gradient(135deg,#1a1a00,#05050f)">⭐</div>
-        <div class="card-body"><h3>Stellar Nurseries</h3><p>Nebulae are the birthplaces of stars — vast clouds of gas and dust where gravity causes matter to collapse and ignite.</p></div>
-      </div>
-      <div class="card">
-        <div class="card-img" style="background:linear-gradient(135deg,#0a002b,#05050f)">🌑</div>
-        <div class="card-body"><h3>Black Holes</h3><p>So dense that not even light can escape, black holes warp spacetime itself. Supermassive ones lurk at the heart of most galaxies.</p></div>
-      </div>
-      <div class="card">
-        <div class="card-img" style="background:linear-gradient(135deg,#002b1a,#05050f)">🌠</div>
-        <div class="card-body"><h3>Meteor Showers</h3><p>When Earth passes through comet debris trails, we're treated to spectacular showers like the Perseids and Leonids.</p></div>
-      </div>
-      <div class="card">
-        <div class="card-img" style="background:linear-gradient(135deg,#2b0a00,#05050f)">☀️</div>
-        <div class="card-body"><h3>Our Sun</h3><p>A medium-sized star 109 times wider than Earth, the Sun contains 99.86% of the Solar System's total mass.</p></div>
-      </div>
-    </div>
-  </section>
- 
-  <!-- CONTACT -->
-  <section class="page" id="contact">
-    <h2 class="section-title">Contact <span>Us</span></h2>
-    <p class="section-sub">// send a transmission from Earth</p>
-    <div class="contact-wrapper">
-      <div id="contact-form">
-        <div class="form-group">
-          <label for="name">Your Name</label>
-          <input type="text" id="name" placeholder="e.g. Neil Armstrong" />
-        </div>
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" placeholder="you@galaxy.com" />
-        </div>
-        <div class="form-group">
-          <label for="topic">Topic</label>
-          <select id="topic">
-            <option value="">-- Select a topic --</option>
-            <option>General Inquiry</option>
-            <option>Astronomy Question</option>
-            <option>Collaboration</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="message">Message</label>
-          <textarea id="message" placeholder="What's on your mind..."></textarea>
-        </div>
-        <button class="btn btn-primary" id="send-btn" style="width:100%">Send Transmission</button>
-      </div>
-      <div class="form-success" id="form-success">
-        <div class="icon">🛸</div>
-        <h3>Transmission Received!</h3>
-        <p>Thanks for reaching out. We'll respond faster than the speed of light (almost).</p>
-      </div>
-    </div>
-  </section>
- 
-  <footer>
-    <p>© 2026 <span>CosmosHub</span> — Built for the Web Programming Course</p>
-  </footer>
- 
-  <script>
-    /* ===== STAR FIELD ===== */
-    var canvas = document.getElementById('stars-canvas');
-    var ctx = canvas.getContext('2d');
-    var stars = [];
- 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
- 
-    function createStars() {
-      stars = [];
-      for (var i = 0; i < 200; i++) {
-        stars.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          r: Math.random() * 1.5 + 0.2,
-          alpha: Math.random(),
-          speed: Math.random() * 0.005 + 0.002,
-          dir: Math.random() > 0.5 ? 1 : -1
-        });
-      }
-    }
- 
-    function drawStars() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (var i = 0; i < stars.length; i++) {
-        var s = stars[i];
-        s.alpha += s.speed * s.dir;
-        if (s.alpha >= 1 || s.alpha <= 0) s.dir *= -1;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(200,220,255,' + s.alpha + ')';
-        ctx.fill();
-      }
-      requestAnimationFrame(drawStars);
-    }
- 
-    resizeCanvas();
-    createStars();
-    drawStars();
-    window.addEventListener('resize', function() { resizeCanvas(); createStars(); });
- 
-    /* ===== PAGE NAVIGATION ===== */
-    function showPage(pageId) {
-      var pages = document.querySelectorAll('.page');
-      for (var i = 0; i < pages.length; i++) {
-        pages[i].classList.remove('active');
-      }
-      var links = document.querySelectorAll('.nav-link');
-      for (var i = 0; i < links.length; i++) {
-        links[i].classList.remove('active');
-      }
-      document.getElementById(pageId).classList.add('active');
-      var activeLinks = document.querySelectorAll('.nav-link[data-page="' + pageId + '"]');
-      for (var i = 0; i < activeLinks.length; i++) {
-        activeLinks[i].classList.add('active');
-      }
-    }
- 
-    var navLinks = document.querySelectorAll('.nav-link');
-    for (var i = 0; i < navLinks.length; i++) {
-      navLinks[i].addEventListener('click', function(e) {
-        e.preventDefault();
-        showPage(this.getAttribute('data-page'));
-      });
-    }
- 
-    /* ===== CONTACT FORM ===== */
-    document.getElementById('send-btn').addEventListener('click', function() {
-      var name    = document.getElementById('name').value.trim();
-      var email   = document.getElementById('email').value.trim();
-      var message = document.getElementById('message').value.trim();
-      if (name === '' || email === '' || message === '') {
-        alert('Please fill in your Name, Email, and Message!');
-        return;
-      }
-      document.getElementById('contact-form').style.display = 'none';
-      document.getElementById('form-success').style.display = 'block';
+  // Smooth nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+    links.forEach(l => {
+      l.style.color = l.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
     });
-  </script>
- 
+  });
+</script>
 </body>
 </html>
